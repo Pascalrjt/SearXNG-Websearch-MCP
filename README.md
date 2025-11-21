@@ -17,8 +17,8 @@ A Model Context Protocol (MCP) server that provides web search capabilities to l
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd websearch-searXNG
+git clone https://github.com/Pascalrjt/SearXNG-Websearch-MCP.git
+cd SearXNG-Websearch-MCP
 
 # Install dependencies and build
 npm install
@@ -42,7 +42,7 @@ Add to your LM Studio MCP configuration file:
   "mcpServers": {
     "websearch-searxng": {
       "command": "node",
-      "args": ["/path/to/websearch-searXNG/dist/index.js"],
+      "args": ["/path/to/SearXNG-Websearch-MCP/dist/index.js"],
       "env": {}
     }
   }
@@ -55,7 +55,7 @@ Add to your LM Studio MCP configuration file:
 - **Windows**: `%APPDATA%\LM Studio\mcp_config.json`
 - **Linux**: `~/.config/lm-studio/mcp_config.json`
 
-**Note**: Replace `/path/to/websearch-searXNG` with your actual installation path.
+**Note**: Replace `/path/to/SearXNG-Websearch-MCP` with your actual installation path.
 
 ### 4. Restart LM Studio
 
