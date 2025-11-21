@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  searxng:
+    image: searxng/searxng:latest
+    container_name: searxng-mcp
+    ports:
+      - "8080:8080"
+    environment:
+      - SEARXNG_BASE_URL=http://localhost:8080/
+      - SEARXNG_SECRET=${SEARXNG_SECRET:-ultrasecretkey}
+    volumes:
+      - ./searxng:/etc/searxng:rw
+    restart: unless-stopped
+    networks:
+      - searxng-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  searxng-network:
+    driver: bridge
