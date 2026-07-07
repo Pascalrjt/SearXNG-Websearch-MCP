@@ -25,5 +25,6 @@ Thumbs.db
 *.swp
 *.swo
 
-# SearXNG data
-searxng/
+# SearXNG data (keep the committed settings.yml, ignore runtime-generated files)
+searxng/*
+!searxng/settings.yml
