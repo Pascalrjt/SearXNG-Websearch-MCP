@@ -31,6 +31,8 @@ npm run build
 npm run docker:up
 ```
 
+This automatically creates a `.env` file with a randomly generated `SEARXNG_SECRET` (if one doesn't exist yet) and starts the container with JSON API access enabled.
+
 Verify SearXNG is running by visiting http://localhost:8080 in your browser.
 
 ### 3. Configure LM Studio
@@ -116,6 +118,10 @@ npm run docker:up
 ```
 
 This will start SearXNG on `http://localhost:8080`. You can verify it's running by visiting this URL in your browser.
+
+The command first runs `scripts/generate-env.js`, which creates a `.env` file with a random `SEARXNG_SECRET` if one doesn't exist (it also replaces known placeholder values like `ultrasecretkey`). To set the secret manually instead, copy `.env.example` to `.env` and generate a value with `openssl rand -hex 32`.
+
+The container uses the committed `searxng/settings.yml`, which enables the JSON output format required by the MCP server (SearXNG's default is HTML-only, which causes `403 Forbidden` on API requests).
 
 ### 4. Build the MCP Server
 
@@ -313,6 +319,14 @@ npm run dev
 3. Clear cache using the `clear_cache` tool
 4. Check Docker logs: `npm run docker:logs`
 
+### Search API Returns 403 Forbidden
+
+SearXNG only serves `format=json` when JSON is listed in `search.formats`. This repository ships `searxng/settings.yml` with JSON enabled, so a fresh setup works out of the box. If you still get 403:
+
+1. Check that `./searxng/settings.yml` contains `json` under `search: formats:`
+2. If you upgraded from an older version of this repo, your locally generated `settings.yml` may predate this fix — see "Upgrading from an Older Version" below
+3. Restart the container after any settings change: `npm run docker:down && npm run docker:up`
+
 ### SearXNG Container Not Starting
 
 ```bash
@@ -325,6 +339,15 @@ npm run docker:logs
 # Restart the container
 npm run docker:down && npm run docker:up
 ```
+
+If the logs show `server.secret_key is not changed`, your `.env` still contains the old `ultrasecretkey` placeholder. Delete the `SEARXNG_SECRET` line (or the whole `.env`) and run `npm run docker:up` again — a new random secret is generated automatically.
+
+### Upgrading from an Older Version
+
+Earlier versions of this repo did not commit `searxng/settings.yml`; SearXNG generated an HTML-only one locally. Because that path was gitignored, `git pull` silently overwrites your local `./searxng/settings.yml` once it became tracked. If you customized that file, back it up before pulling and re-apply your changes on top of the new version (keep `json` in `search.formats`). Afterwards:
+
+1. Remove any `ultrasecretkey` value from your `.env`
+2. Restart: `npm run docker:down && npm run docker:up`
 
 ### Cache Issues
 

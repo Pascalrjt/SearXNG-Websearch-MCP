@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   searxng:
     image: searxng/searxng:latest
@@ -8,7 +6,7 @@ services:
       - "8080:8080"
     environment:
       - SEARXNG_BASE_URL=http://localhost:8080/
-      - SEARXNG_SECRET=${SEARXNG_SECRET:-ultrasecretkey}
+      - SEARXNG_SECRET=${SEARXNG_SECRET:?SEARXNG_SECRET is not set — run 'npm run docker:up' (auto-generates .env) or create .env from .env.example}
     volumes:
       - ./searxng:/etc/searxng:rw
     restart: unless-stopped

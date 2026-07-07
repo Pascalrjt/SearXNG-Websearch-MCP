@@ -1,0 +1,16 @@
+# SearXNG configuration for the MCP server.
+# Merged with SearXNG's defaults (use_default_settings: true).
+use_default_settings: true
+
+server:
+  # secret_key is provided via the SEARXNG_SECRET environment variable
+  # (see docker-compose.yml); do not hardcode it here.
+  # The limiter blocks programmatic API access; this instance is local-only.
+  limiter: false
+
+search:
+  # The MCP server queries the API with format=json — without "json" here
+  # SearXNG returns 403 Forbidden for every search.
+  formats:
+    - html
+    - json

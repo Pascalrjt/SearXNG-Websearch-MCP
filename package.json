@@ -8,7 +8,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "prepare": "npm run build",
-    "docker:up": "docker-compose up -d",
+    "docker:up": "node scripts/generate-env.js && docker-compose up -d",
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f"
   },
